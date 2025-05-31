@@ -32,6 +32,17 @@ class UserController extends Controller
         return view('admin.users.create', ['assignableRoles' => $this->getAssignableRoles()]);
     }
 
+    /**
+     * Display a listing of the users.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function index()
+    {
+        $users = User::latest()->paginate(10); // Example: Get all users, paginated
+        return view('admin.users.index', compact('users'));
+    }
+
 
     /**
      * Store a newly created user in storage.

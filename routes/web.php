@@ -24,6 +24,7 @@ Route::middleware('auth')->group(function () {
 
 // Routes for Dean to manage users
 Route::middleware(['auth', 'checkrole:dean'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/users', [UserController::class, 'index'])->name('users.index'); // Add this for listing users
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
     // You can add more user management routes here later (index, edit, update, destroy)
