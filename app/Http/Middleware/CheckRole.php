@@ -13,8 +13,9 @@ class CheckRole
      * Handle an incoming request.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  string  ...$roles  // Allows passing multiple roles, e.g., checkrole:dean,manager
      */
-    public function handle(Request $request, Closure $next, string $role): Response
+    public function handle(Request $request, Closure $next, ...$roles): Response
     {
         if (!Auth::check()) {
             return redirect('login');
@@ -22,10 +23,11 @@ class CheckRole
 
         $user = Auth::user();
 
-        if ($user->role == $role) {
-            return $next($request);
+        if (!$user->hasRole(...$roles)) { // Assumes hasRole can check against multiple roles if needed
+            // Or redirect to a different page with an error message
+            return abort(403, 'Forbidden. You do not have the required role.');
         }
 
-        abort(403, 'Unauthorized.');
+        return $next($request);
     }
 }
